@@ -27,7 +27,6 @@ class PackingAssistantUI:
         font.setFamily("楷体")
         font.setPointSize(12)
         form.setFont(font)
-        form.setWindowFlags(form.windowFlags() | 0x40000)
         
         # 设置窗口图标
         iconPath = os.path.join(os.path.dirname(__file__), 'src', 'static', 'icon.ico')
@@ -83,7 +82,8 @@ class PackingAssistantUI:
         self.iconPathInput.setObjectName("iconPathInput")
         self.iconLayout.addWidget(self.iconPathInput)
         self.verticalLayout.addLayout(self.iconLayout)
-
+        self.iconPathInput.setPlaceholderText("可拖拽文件【.ico .png .jpg】") # 设置提示词
+        
         # 添加目录选择布局
         self.dirLayout = QtWidgets.QHBoxLayout()
         self.dirLayout.setObjectName("dirLayout")
@@ -106,6 +106,7 @@ class PackingAssistantUI:
         self.dirPathInput.setObjectName("dirPathInput")
         self.dirLayout.addWidget(self.dirPathInput)
         self.verticalLayout.addLayout(self.dirLayout)
+        self.dirPathInput.setPlaceholderText("可拖拽文件夹") # 设置提示词
 
         # 添加选择文件按钮
         self.selectFileButton = QtWidgets.QPushButton(parent=form)
@@ -125,6 +126,7 @@ class PackingAssistantUI:
         font.setPointSize(10)
         self.filePathInput.setFont(font)
         self.filePathInput.setObjectName("filePathInput")
+        self.filePathInput.setPlaceholderText("可拖拽文件【.py】") # 设置提示词
 
         # 添加版本标签
         self.versionLabel = QtWidgets.QLabel(parent=form)
@@ -155,7 +157,7 @@ class PackingAssistantUI:
         self.selectDirButton.setText(_translate("Form", "选择目录"))
         self.selectFileButton.setText(_translate("Form", "选择文件"))
         self.packButton.setText(_translate("Form", "打包"))
-        self.versionLabel.setText(_translate("Form", "v1.0.0"))
+        self.versionLabel.setText(_translate("Form", "v1.0.1"))
         self.aboutButton.setText(_translate("Form", "关于"))
 
         # 绑定按钮点击事件
@@ -199,7 +201,7 @@ def selectFile():
         if filePath:
             ui.filePathInput.setText(filePath)
             ui.filePath = os.path.dirname(filePath)
-    except: pass
+    except: windll.user32.MessageBoxW(None, "选择文件失败!", "错误", 0x0 | 0x10 | 0x40000)
 
 
 # 选择图标
@@ -209,7 +211,7 @@ def selectIcon():
         if iconPath:
             ui.iconPath = iconPath
             ui.iconPathInput.setText(iconPath)
-    except: pass
+    except: windll.user32.MessageBoxW(None, "选择图标失败!", "错误", 0x0 | 0x10 | 0x40000)
 
 
 # 选择目录
@@ -219,21 +221,19 @@ def selectDir():
         if dirPath:
             ui.dirPath = dirPath
             ui.dirPathInput.setText(dirPath)
-    except: pass
+    except: windll.user32.MessageBoxW(None, "选择目录失败!", "错误", 0x0 | 0x10 | 0x40000)
 
 
 # 关于
 def about():
     text = """
-    作者: fjh
-
-    版本: v1.0.0
+    版本: v1.0.1
 
     联系: 2449579731@qq.com
 
-    说明: 打包 Python 脚本的工具, 有问题请联系作者。
-
     注意: 请确保已拥有 Python 环境。
+
+    开源: https://github.com/cxfjh/PyBundler
     """
     
     msgBox = QtWidgets.QMessageBox()
